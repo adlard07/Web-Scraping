@@ -7,10 +7,10 @@ import time
 
 
 class Profiles:
+    #scrolls till the end of the page returning all the links of profiles
     def get_profiles(self, url, driver):
         driver.get(url)
         while True:
-            #scrolls till the end of the page
             initial_height = driver.execute_script("return document.body.scrollHeight;")
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(1)
@@ -29,7 +29,7 @@ class Profiles:
             links[::2]
             )
         
-        
+    # iterates over the links and returns the final dataframe with all the fields
     def json_output(self, driver, links):
         data = []
         for link in links:
@@ -71,7 +71,7 @@ class Profiles:
         output = pd.DataFrame(new_data)
             
         return output
-
+    
 ## test cases
 if __name__=="__main__":
     driver = webdriver.Edge()
