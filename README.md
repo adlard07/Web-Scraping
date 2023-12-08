@@ -18,4 +18,4 @@ python -m database
 ```
 
 ## Output
-![Alt text](assets\Screenshot 2023-12-08 120138.png?raw=true "CSV Screenshot")
+![Alt text](assets/Screenshot%202023-12-08%20120138.png "CSV Screenshot")
