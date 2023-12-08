@@ -18,6 +18,6 @@ python -m database
 ```
 
 ## Output
-![Alt text](assets/Screenshot%202023-12-08%20120138.png "CSV Screenshot")
-![Alt text](assets/Screenshot%202023-12-08%20120953.png "file Screenshot")
+![Alt text](assets/Screenshot%202023-12-08%20120138.png "CSV Screenshot")<br>
+![Alt text](assets/Screenshot%202023-12-08%20120953.png "file Screenshot")<br>
 ![Alt text](assets/Screenshot%202023-12-08%20121227.png "file Screenshot")
