@@ -2,82 +2,117 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import pandas as pd
+import numpy as np
 import time
 
-driver = webdriver.Edge()
-url = "https://ocimpact.app.swapcard.com/widget/event/oc2023/people/RXZlbnRWaWV3XzQ1NTQwOA==?showActions=true"
-time.sleep(3)
 
 class Profiles:
     def get_profiles(self, url, driver):
         driver.get(url)
         while True:
+            #scrolls till the end of the page
             initial_height = driver.execute_script("return document.body.scrollHeight;")
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             time.sleep(1)
             updated_height = driver.execute_script("return document.body.scrollHeight;")
             if updated_height == initial_height:
                 break
-            name = [driver.find_elements(By.XPATH, '//span[@class="clamp__Clamp-ui__sc-1aq2rfp-0 grid__FullName-cmp__sc-1x1x5ym-3 hAEPUd klXdSC"]')]
-            job = [driver.find_elements(By.XPATH, '//span[@class="clamp__Clamp-ui__sc-1aq2rfp-0 grid__Job-cmp__sc-1x1x5ym-5 hAEPUd eXjbIP"]')]
-            org = [driver.find_elements(By.XPATH, '//span[@class="clamp__Clamp-ui__sc-1aq2rfp-0 grid__Organization-cmp__sc-1x1x5ym-6 hAEPUd cOiylb"]')]
-
+            
             links=[]
             tags = driver.find_elements(By.TAG_NAME, "a")
             for tag in tags:
                 value = tag.get_attribute("href")
                 links.append(value)
+            
         return (
-            name,
-            job,
-            org,
-            links
+            driver,
+            links[::2]
             )
-    def json_output(self, name, job, org, links):
+        
+        
+    def json_output(self, driver, links):
         data = []
-        for link in links[:5]:
+        for link in links:
             driver.get(link)
             time.sleep(3)
             soup = BeautifulSoup(driver.page_source, 'html.parser')
             
+            name = soup.find_all('h2', class_='style__Name-cmp__sc-1s7e137-1 jhjTCw')
+            job = soup.find_all('h4', class_='style__Job-cmp__sc-1s7e137-2 dzeTcv')
+            org = soup.find_all('h3', class_='style__Organization-cmp__sc-1s7e137-3 cVzOUy')
+            
             question = soup.find_all('div', class_='style__Name-cmp__sc-165xmjy-1 dVHQNt')
             answer = soup.find_all('div', class_='style__Content-cmp__sc-165xmjy-2 dNVyzo')
             
-            ques, ans = [], []
+            names, jobs, orgs, ques, ans = [], [], [], [], []
             for i in range(len(question)):
                 ques.append(question[i].text)
                 ans.append(answer[i].text)
             diction = dict(zip(ques, ans))
-            data.append(diction)
-
-        if len(name) == len(job) == len(org) == len(links):
-            new_data = {}
-            for d in data:
-                for key, value in d.items():
-                    if key not in new_data:
-                        new_data[key] = [value]
-                    else:
-                        new_data[key].append(value)
-            new_data['Name'] = name
-            new_data['Job title'] = job
-            new_data['Organization'] = org
             
-            output = pd.DataFrame(new_data)
+            for i in range(len(name)):
+                names.append(name[i].text)
+                jobs.append(job[i].text)
+                orgs.append(org[i].text)
+                
+            diction['Name'] = names
+            diction['Job title'] = jobs
+            diction['Organization'] = orgs
+            
+            data.append(diction)
+        # identifies unique values(questions and answers) and assigns them as column name
+        new_data = {}
+        all_keys = {key for d in data for key in d}
+        new_data = {key: [] for key in all_keys}
+        for d in data:
+            for key in all_keys:
+                new_data[key].append(d.get(key, np.nan))
+        
+        output = pd.DataFrame(new_data)
             
         return output
 
 if __name__=="__main__":
-
-    # links = [
-    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjIzMTY3Mjg=', 
-    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjU3MTUwMzU=',
-    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjUyOTQxMzQ=',
+## test cases
+#     links = [
+    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjIzMTY3Mjg=',
+    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjEzNzMyNDE=',
+    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjEzNzM0NjE=',
+    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjMyNzcwMjQ=',
+    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjUzNzMxMDE=',
     #     ]
-    # name = ['John', 'Alice', 'Bob']
-    # job = ['Engineer', 'Manager', 'Developer']
-    # org = ['Company A', 'Company B', 'Company C']
+    
+    # names = [
+    #     'Rotimi Olawale (he/him)',
+    #     'Nik Kafka (he/him)', 
+    #     'Martin Burt (he/him)', 
+    #     'Maryam Montague (she/her)', 
+    #     'Ingrid Karangwayire (she/her)'
+    #     ]
+    
+    # jobs = [
+    #     'Executive Director', 
+    #     'CEO & Founder', 
+    #     'Founder & CEO', 
+    #     'Founder + Executive Director', 
+    #     'CEO'
+    #     ] 
+    
+    # orgs = [
+    #     'Youthhubafrica', 
+    #     'Teach A Man To Fish', 
+    #     'Fundación Paraguaya & Poverty Stoplight', 
+    #     'Project Soar', 
+    #     'BK Foundation'
+    #     ]
+    
+    driver = webdriver.Edge()
+    url = "https://ocimpact.app.swapcard.com/widget/event/oc2023/people/RXZlbnRWaWV3XzQ1NTQwOA==?showActions=true"
+    time.sleep(3)
     
     profiles = Profiles()
-    name, job, org, links = profiles.get_profiles(url, driver)
-    output = profiles.json_output(name, job, org, links)
-    print(output)
+    driverr, links = profiles.get_profiles(url, driver)
+    
+    output = profiles.json_output(driver, links[:5])
+    print(output, "\n")
+    print(output.columns)
