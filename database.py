@@ -3,7 +3,7 @@ from scraper import Profiles
 import duckdb
 import time
 
-conn = duckdb.connect(database=':memory:', read_only=False)
+conn = duckdb.connect(database='mydb.db', read_only=False)
 
 driver = webdriver.Edge()
 url = "https://ocimpact.app.swapcard.com/widget/event/oc2023/people/RXZlbnRWaWV3XzQ1NTQwOA==?showActions=true"
