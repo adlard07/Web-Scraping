@@ -5,7 +5,6 @@ import os
 import time
 
 conn = duckdb.connect(database=':memory:', read_only=False)
-# conn.execute("USE profiles;").fetchdf()
 
 if os.path.exists('mydb.db'):
     result = conn.execute("SELECT * FROM my_table").fetchdf()
