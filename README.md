@@ -16,3 +16,6 @@ pip install -r requirements.txt
 ```bash
 python -m database
 ```
+
+## Output
+![Alt text](assets\Screenshot 2023-12-08 120138.png?raw=true "CSV Screenshot")
