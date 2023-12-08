@@ -1,7 +1,6 @@
 from selenium import webdriver
 from scraper import Profiles
 import duckdb
-import os
 import time
 
 conn = duckdb.connect(database=':memory:', read_only=False)

@@ -72,40 +72,8 @@ class Profiles:
             
         return output
 
-if __name__=="__main__":
 ## test cases
-#     links = [
-    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjIzMTY3Mjg=',
-    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjEzNzMyNDE=',
-    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjEzNzM0NjE=',
-    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjMyNzcwMjQ=',
-    #     'https://ocimpact.app.swapcard.com/widget/event/oc2023/person/RXZlbnRQZW9wbGVfMjUzNzMxMDE=',
-    #     ]
-    
-    # names = [
-    #     'Rotimi Olawale (he/him)',
-    #     'Nik Kafka (he/him)', 
-    #     'Martin Burt (he/him)', 
-    #     'Maryam Montague (she/her)', 
-    #     'Ingrid Karangwayire (she/her)'
-    #     ]
-    
-    # jobs = [
-    #     'Executive Director', 
-    #     'CEO & Founder', 
-    #     'Founder & CEO', 
-    #     'Founder + Executive Director', 
-    #     'CEO'
-    #     ] 
-    
-    # orgs = [
-    #     'Youthhubafrica', 
-    #     'Teach A Man To Fish', 
-    #     'Fundación Paraguaya & Poverty Stoplight', 
-    #     'Project Soar', 
-    #     'BK Foundation'
-    #     ]
-    
+if __name__=="__main__":
     driver = webdriver.Edge()
     url = "https://ocimpact.app.swapcard.com/widget/event/oc2023/people/RXZlbnRWaWV3XzQ1NTQwOA==?showActions=true"
     time.sleep(3)
