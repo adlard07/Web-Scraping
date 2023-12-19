@@ -17,7 +17,7 @@ class Profiles:
             updated_height = driver.execute_script("return document.body.scrollHeight;")
             if updated_height == initial_height:
                 break
-            
+
             links=[]
             tags = driver.find_elements(By.TAG_NAME, "a")
             for tag in tags:
